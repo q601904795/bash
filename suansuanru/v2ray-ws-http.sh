@@ -14,30 +14,13 @@ check_system() {
 
 
 check_system
-echo && stty erase '^H' && read -p "输入域名: " domain
 
 [[ $OS == "Debian" ]] || [[ $OS == "Ubuntu" ]] && cmd='apt' && $cmd update -y 
 [[ $OS == "CentOS" ]] && cmd='yum'
 
 $cmd install curl lrzsz zip unzip psmisc uuid -y
-wget -O /usr/bin/caddy https://raw.githubusercontent.com/caippx/caddy-v1/master/caddy
-chmod +x /usr/bin/caddy
-ulimit -n 512000
-mkdir -p /data/www/
-mkdir -p /etc/caddy/conf.d
-echo "import conf.d/*" > /etc/caddy/caddy.conf
-echo "
-http://$domain:80 {
-    root /data/www/$domain
-    proxy /static 127.0.0.1:8848 {
-        websocket
-        header_upstream -Origin
-    }
-}
-" > /etc/caddy/conf.d/$domain
-mkdir /data/www/$domain
-echo "waiting content ~ " > /data/www/$domain/index.html
-bash <(curl -s -L https://raw.githubusercontent.com/caippx/bash/master/suansuanru/lajiv2ray-install.sh)
+
+bash <(curl -s -L https://raw.githubusercontent.com/q601904795/bash/master/suansuanru/lajiv2ray-install.sh)
 rm -rf /usr/local/etc/v2ray/*.json
 echo '
 {
@@ -100,11 +83,9 @@ echo '
   "transport": {}
 }
 ' > /usr/local/etc/v2ray/config.json
-killall -9 caddy
 ulimit -n 512000
-nohup caddy -conf=/etc/caddy/caddy.conf -agree -quic >> /tmp/caddy.log 2>&1 &
 service v2ray restart
-uuid=`cat /etc/v2ray/config.json | grep "id" | cut -d '"' -f 4`
+uuid=`cat /usr/local/etc/v2ray/config.json | grep "id" | cut -d '"' -f 4`
 ip=`curl -s http://whatismyip.akamai.com`
 echo "
 连接信息：
