@@ -1,7 +1,7 @@
 #!/bin/bash
 #一个垃圾 V2ray安装脚本 
 
-ver="$(echo `curl "https://api.github.com/repos/v2fly/v2ray-core/releases/latest"` | grep 'tag_name' | awk -F '"' '{print $26}')"
+ver="$(echo `curl "https://api.github.com/repos/v2fly/v2ray-core/releases/latest"` | grep 'tag_name' | awk -F '"' '{print $1}')"
 download_url="https://github.com/v2fly/v2ray-core/releases/download/${ver}/v2ray-linux-64.zip"
 mkdir -p /tmp/v2ray-linux-64/
 wget -O /tmp/v2ray-linux-64/v2ray.zip $download_url && cd /tmp/v2ray-linux-64/ && unzip /tmp/v2ray-linux-64/v2ray.zip
